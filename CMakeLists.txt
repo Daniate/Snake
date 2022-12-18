@@ -10,6 +10,13 @@ add_executable(${PROJECT_NAME} main.c snake.c snake.h geometry.c geometry.h)
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 
+file(
+        COPY
+        ${CMAKE_CURRENT_SOURCE_DIR}/mixkit-retro-game-notification-212.wav
+        DESTINATION
+        ${CMAKE_CURRENT_BINARY_DIR}
+)
+
 #
 #cmake_minimum_required(VERSION 3.20)
 #project(Snake C)

@@ -6,6 +6,7 @@
 #define GLUTTONOUSSNAKE_SNAKE_H
 
 #include <SDL.h>
+#include <SDL_audio.h>
 #include "geometry.h"
 
 #define TILE_SIZE (20)

@@ -102,6 +102,25 @@ void snake_move(Snake_t *snake) {
     }
 }
 
+void play_eat_food_sound() {
+    SDL_AudioSpec spec;
+    Uint8 *buffer;
+    Uint32 length;
+    const char *file = "mixkit-retro-game-notification-212.wav";
+    if (SDL_LoadWAV(file, &spec, &buffer, &length)) {
+        SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &spec, NULL, 0);
+        if (0 == SDL_QueueAudio(deviceId, buffer, length)) {
+            SDL_PauseAudioDevice(deviceId, 0);
+        } else {
+            fprintf(stderr, "Could not enqueue audio: %s\n", SDL_GetError());
+        }
+        /* Do stuff with the WAV data, and then... */
+        SDL_FreeWAV(buffer);
+    } else {
+        fprintf(stderr, "Could not open %s: %s\n", file, SDL_GetError());
+    }
+}
+
 bool snake_eat_food(Snake_t *snake, Food_t *food) {
     if (snake->head->pos.x == food->x && snake->head->pos.y == food->y) {
         SnakeBody_t *body = snake->body;
@@ -109,6 +128,8 @@ bool snake_eat_food(Snake_t *snake, Food_t *food) {
             if (body->next) {
                 body = body->next;
             } else {
+                play_eat_food_sound();
+
                 body->next = malloc(sizeof(SnakeBody_t));
                 memset(body->next, '\0', sizeof(SnakeBody_t));
                 body->next->pos = snake->oldTailPos;
